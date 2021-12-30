@@ -140,9 +140,18 @@ func (h *Handler) metainfoHandler(w http.ResponseWriter, r *request) {
 		for _, n := range mi.Nodes {
 			nodes = append(nodes, string(n))
 		}
+
+		info, _ := mi.UnmarshalInfo()
+		files := info.Files
+		paths := make([]string, len(files))
+		for _, file := range files {
+			paths = append(paths, file.DisplayPath(&info))
+		}
+
 		enc := json.NewEncoder(w)
 		enc.Encode(struct {
 			Info         []byte     `json:"info,omitempty"`
+			Paths        []string   `json:"paths,omitempty"`
 			Announce     string     `json:"announce,omitempty"`
 			AnnounceList [][]string `json:"announceList,omitempty"`
 			Nodes        []string   `json:"nodes,omitempty"`
@@ -153,6 +162,7 @@ func (h *Handler) metainfoHandler(w http.ResponseWriter, r *request) {
 			UrlList      []string   `json:"urlList,omitempty"`
 		}{
 			Info:         mi.InfoBytes,
+			Paths:        paths,
 			Announce:     mi.Announce,
 			AnnounceList: mi.AnnounceList,
 			Nodes:        nodes,
