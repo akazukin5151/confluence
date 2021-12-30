@@ -151,7 +151,7 @@ func (h *Handler) metainfoHandler(w http.ResponseWriter, r *request) {
 		enc := json.NewEncoder(w)
 		enc.Encode(struct {
 			Info         []byte     `json:"info,omitempty"`
-			Paths        []string   `json:"paths,omitempty"`
+			Paths        []string   `json:"paths"`
 			Announce     string     `json:"announce,omitempty"`
 			AnnounceList [][]string `json:"announceList,omitempty"`
 			Nodes        []string   `json:"nodes,omitempty"`
